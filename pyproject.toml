@@ -1,0 +1,62 @@
+[tool.poetry]
+name = "raventree"
+version = "0.1.0"
+description = "Fetch NAVs for Mutual Funds"
+authors = ["Ashesh Anand <62696185+ashesh705@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+loguru = "^0.6.0"
+aiohttp = {extras = ["speedups"], version = "^3.8.1"}
+pydantic = "^1.9.0"
+
+[tool.poetry.dev-dependencies]
+ipython = "^8.3.0"
+isort = "^5.10.1"
+black = "^22.3.0"
+flake8 = "^4.0.1"
+mypy = "^0.950"
+pre-commit = "^2.19.0"
+pytest = "^7.1.2"
+pytest-cov = "^3.0.0"
+pytest-sugar = "^0.9.4"
+taskipy = "^1.10.1"
+pytest-asyncio = "^0.18.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 80
+
+[tool.isort]
+line_length = 80
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "-ra -v -W error"
+testpaths = [
+    "tests",
+]
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+branch = true
+source = [
+    "src"
+]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+strict_equality = true
+
+[tool.taskipy.tasks]
+format-check = { cmd = "isort . -c && black --check .", help = "Check code for any formatting issues" }
+format = { cmd = "isort . && black .", help = "Fix all code formatting issues" }
+lint-check = { cmd = "flake8 && mypy .", help = "Check code for any lint issues" }
+test = { cmd = "python -m pytest --cov", help = "Run all unit tests and produce coverage reports" }
